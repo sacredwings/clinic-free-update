@@ -11,6 +11,12 @@ async function handler(req, res) {
     await client.connect()
     let mongoClient = client.db(Config.mongo.connect.dbName)
 
+    let collectionContractType = mongoClient.collection(`contract-type`)
+    let collectionHF = mongoClient.collection(`hf`)
+    let collectionResearch = mongoClient.collection(`research`)
+    let collectionSpecialist = mongoClient.collection(`specialist`)
+    let collectionRole = mongoClient.collection(`role`)
+
     //Пользователи
     let collectionUser = mongoClient.collection(`user`)
     let arFieldsUser = {
@@ -50,23 +56,76 @@ async function handler(req, res) {
     await collectionContract.updateMany({}, {$set: {clinic_id: new ObjectId(arFieldsClinic._id)}})
 
     let collectionPrice = mongoClient.collection(`price`)
-    await collectionContract.updateMany({}, {$set: {clinic_id: new ObjectId(arFieldsClinic._id)}})
+    await collectionPrice.updateMany({}, {$set: {clinic_id: new ObjectId(arFieldsClinic._id)}})
 
-    /*
-    let result = await collectionWorker.find({}).toArray()
-    for (let item of result) {
+    //ORG
+    let resultOrg = await collectionOrg.find({}).toArray()
+    for (let item of resultOrg) {
         let arFields = {
-            clinic_id: new DB().ObjectID(arFieldsClinic._id),
+            title: item.name,
         }
 
-        let result = await collectionWorker.updateOne({_id: item._id}, {$set: arFields})
-        console.log(item)
-    }*/
+        await collectionOrg.updateOne({_id: item._id}, {$set: arFields})
+    }
 
+    //CONTRACT
+    let resultContract = await collectionContract.find({}).toArray()
+    for (let item of resultContract) {
+        let arFields = {
+            title: item.name,
+        }
 
+        await collectionContract.updateOne({_id: item._id}, {$set: arFields})
+    }
 
+    //CONTRACT-TYPE
+    let resultContractType = await collectionContractType.find({}).toArray()
+    for (let item of resultContractType) {
+        let arFields = {
+            title: item.name,
+        }
 
+        await collectionContractType.updateOne({_id: item._id}, {$set: arFields})
+    }
 
+    //HF
+    let resultHF = await collectionHF.find({}).toArray()
+    for (let item of resultHF) {
+        let arFields = {
+            title: item.name,
+        }
+
+        await collectionHF.updateOne({_id: item._id}, {$set: arFields})
+    }
+
+    //Research
+    let resultResearch = await collectionResearch.find({}).toArray()
+    for (let item of resultResearch) {
+        let arFields = {
+            title: item.name,
+        }
+
+        await collectionResearch.updateOne({_id: item._id}, {$set: arFields})
+    }
+    //Specialist
+    let resultSpecialist = await collectionSpecialist.find({}).toArray()
+    for (let item of resultSpecialist) {
+        let arFields = {
+            title: item.name,
+        }
+
+        await collectionSpecialist.updateOne({_id: item._id}, {$set: arFields})
+    }
+
+    //ROLE
+    let resultRole = await collectionRole.find({}).toArray()
+    for (let item of resultRole) {
+        let arFields = {
+            title: item.name,
+        }
+
+        await collectionRole.updateOne({_id: item._id}, {$set: arFields})
+    }
     console.log('--- END ---')
 
     //let collection = mongoClient.collection('post')
