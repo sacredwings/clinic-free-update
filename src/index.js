@@ -46,8 +46,8 @@ async function handler(req, res) {
     await collectionClinic.insertOne(arFieldsClinic)
 
     let collectionWorker = mongoClient.collection(`worker`)
-    await collectionWorker.rename("prof-examination")
     await collectionWorker.updateMany({}, {$set: {clinic_id: new ObjectId(arFieldsClinic._id)}})
+    await collectionWorker.rename("prof-examination")
 
     let collectionOrg = mongoClient.collection(`org`)
     await collectionOrg.updateMany({}, {$set: {clinic_id: new ObjectId(arFieldsClinic._id)}})
