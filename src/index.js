@@ -46,8 +46,10 @@ async function handler(req, res) {
     await collectionClinic.insertOne(arFieldsClinic)
 
     let collectionWorker = mongoClient.collection(`worker`)
-    await collectionWorker.updateMany({}, {$set: {clinic_id: new ObjectId(arFieldsClinic._id)}})
-    await collectionWorker.rename("prof-examination")
+    await collectionWorker.rename("prof_examination")
+
+    let collectionProfExamination = mongoClient.collection(`prof_examination`)
+    await collectionProfExamination.updateMany({}, {$set: {clinic_id: new ObjectId(arFieldsClinic._id)}})
 
     let collectionOrg = mongoClient.collection(`org`)
     await collectionOrg.updateMany({}, {$set: {clinic_id: new ObjectId(arFieldsClinic._id)}})
@@ -57,6 +59,9 @@ async function handler(req, res) {
 
     let collectionPrice = mongoClient.collection(`price`)
     await collectionPrice.updateMany({}, {$set: {clinic_id: new ObjectId(arFieldsClinic._id)}})
+
+    let collectionSpecialistVisit = mongoClient.collection(`specialist_visit`)
+    await collectionSpecialistVisit.updateMany({}, {$set: {clinic_id: new ObjectId(arFieldsClinic._id)}})
 
     //ORG
     let resultOrg = await collectionOrg.find({}).toArray()
