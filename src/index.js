@@ -20,7 +20,7 @@ async function handler(req, res) {
     //Пользователи
     let collectionUser = mongoClient.collection(`user`)
     let arFieldsUser = {
-        login: 'test',
+        login: 'test1',
         password: '$2b$10$zdWLdO9rHZgTiTkPKQYsY.6TBAMH.pTt6MZcZcb7i85.2vCA7uUkq'
     }
     await collectionUser.insertOne(arFieldsUser)
