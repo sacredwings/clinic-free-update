@@ -11,6 +11,39 @@ async function handler(req, res) {
     await client.connect()
     let mongoClient = client.db(Config.mongo.connect.dbName)
 
+    let collectionProfExamination = mongoClient.collection(`prof_examination`)
+
+    let arAggregate = []
+    arAggregate.push({
+        $match: {}
+    })
+    arAggregate.push({
+        $lookup: {
+            from: 'user',
+            localField: 'user_id',
+            foreignField: '_id',
+            as: '_user_id'
+        }
+    })
+    arAggregate.push({
+        $unwind: {
+            path: '$_user_id',
+            preserveNullAndEmptyArrays: true
+        }
+    })
+    let result = await collectionProfExamination.aggregate(arAggregate).toArray()
+    for (let item of result) {
+        let arFields = {
+            first_name: item._user_id.first_name,
+            last_name: item._user_id.last_name,
+            second_name: item._user_id.second_name,
+        }
+
+        await collectionProfExamination.updateOne({_id: item._id}, {$set: arFields})
+    }
+
+    console.log('--- END ---')
+    /*
     let collectionContractType = mongoClient.collection(`contract-type`)
     let collectionHF = mongoClient.collection(`hf`)
     let collectionResearch = mongoClient.collection(`research`)
@@ -135,7 +168,7 @@ async function handler(req, res) {
 
     //let collection = mongoClient.collection('post')
 
-
+*/
 
 /*
     let i = 0
